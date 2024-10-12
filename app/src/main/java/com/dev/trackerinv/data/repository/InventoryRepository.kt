@@ -1,5 +1,7 @@
 package com.dev.trackerinv.data.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import com.dev.trackerinv.data.model.Purchase
 import com.dev.trackerinv.data.model.Sale
 import com.dev.trackerinv.data.api.ApiService
@@ -12,6 +14,26 @@ class InventoryRepository(private val apiService: ApiService, private val databa
 
     private val saleDao = database.saleDao()
     private val purchaseDao = database.purchaseDao()
+
+    suspend fun syncAllPurchases() {
+        val purchases = apiService.getAllPurchases().map { it.toEntity() }
+        // Insert data into Room database
+        purchaseDao.insertAllPurchases(purchases)
+    }
+
+    suspend fun syncAllSales() {
+        val sales = apiService.getAllSales().map { it.toEntity() }
+        // Insert data into Room database
+        saleDao.insertAllSales(sales)
+    }
+
+    fun getAllPurchasesFromRoom(): LiveData<List<Purchase>> {
+        return purchaseDao.getAllPurchases().map { it -> it.map { it.toDomainModel() } } // Fetches LiveData from the DAO
+    }
+
+    fun getAllSalesFromRoom(): LiveData<List<Sale>> {
+        return saleDao.getAllSales().map { it -> it.map { it.toDomainModel() } } // Fetches LiveData from the DAO
+    }
 
     suspend fun getSaleById(id: String): Sale? {
         // First, check the Room database

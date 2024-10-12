@@ -13,6 +13,20 @@ import kotlinx.coroutines.launch
 
 class InventoryViewModel(private val repository: InventoryRepository) : ViewModel() {
 
+    init {
+        viewModelScope.launch {
+            try {
+                repository.syncAllPurchases() // Sync purchases data from API
+                repository.syncAllSales() // Sync sales data from API
+            } catch (e: Exception) {
+                // Handle any errors (e.g., network issues)
+            }
+        }
+    }
+
+    val purchases: LiveData<List<Purchase>> = repository.getAllPurchasesFromRoom()
+    val sales: LiveData<List<Sale>> = repository.getAllSalesFromRoom()
+
     private val _toastMessage = MutableLiveData<String>()
     val toastMessage: LiveData<String> get() = _toastMessage
 
@@ -53,5 +67,7 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
         }
         return _purchaseResponse
     }
+
+
 
 }

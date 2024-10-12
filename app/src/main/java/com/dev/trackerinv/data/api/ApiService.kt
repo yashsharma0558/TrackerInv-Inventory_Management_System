@@ -21,4 +21,10 @@ interface ApiService {
 
     @GET("get_purchase/{id}")
     suspend fun getPurchaseById(@Path("id") id: String): Response<Purchase>
+
+    @GET("get_purchases")
+    suspend fun getAllPurchases(): List<Purchase>
+
+    @GET("get_sales")
+    suspend fun getAllSales(): List<Sale>
 }
