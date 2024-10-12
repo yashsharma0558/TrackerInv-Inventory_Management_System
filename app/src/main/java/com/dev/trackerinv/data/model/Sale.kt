@@ -1,4 +1,4 @@
-package com.dev.trackerinv.model
+package com.dev.trackerinv.data.model
 
 import android.graphics.Bitmap
 // sale product (platform(flipkart, amazon, myntra, ajio, meesho,
@@ -7,9 +7,19 @@ import android.graphics.Bitmap
 // total invoice value( sp+gst ), delivery_channel(flipkart, amazon, myntra, ajio, meesho, delhivery, offline),
 // delivery and other charges, net income(sale_price - delivery and other charges) )
 data class Sale(
-    val image: String,
     val id: String,
-    val inv_no: String,
-    val inv_date: String,
+    val image: String,
+    val platform: String,
+    val date: String,
+    val stock_id: String,
+    val product_name: String,
     val cus_name: String,
+    val cus_ph: String,
+    val quantity: Int,
+    val sp: Double,
+    val gst: GST,
+//    val total_price: Double
+    val delivery_channel: String,
+    val delivery_and_other_expenses: Double,
+//    val net_income: Double
 )
