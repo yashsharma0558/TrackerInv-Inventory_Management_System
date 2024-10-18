@@ -1,22 +1,23 @@
-package com.dev.trackerinv.ui.screens.purchase
+package com.dev.trackerinv.ui.screen.purchase
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.trackerinv.InventoryApp
 import com.dev.trackerinv.R
+import com.dev.trackerinv.data.model.Purchase
 import com.dev.trackerinv.databinding.FragmentPurchaseBinding
-import com.dev.trackerinv.databinding.FragmentSaleBinding
 import com.dev.trackerinv.ui.adapter.PurchaseAdapter
-import com.dev.trackerinv.ui.adapter.SaleAdapter
-import com.dev.trackerinv.ui.viewmodel.InventoryViewModel
+import com.dev.trackerinv.ui.viewmodel.PurchaseViewModel
+import com.dev.trackerinv.ui.viewmodel.SaleViewModel
 
 class PurchaseFragment : Fragment() {
-    private lateinit var viewModel: InventoryViewModel
+    private lateinit var viewModel: PurchaseViewModel
     private lateinit var binding: FragmentPurchaseBinding
     private lateinit var adapter: PurchaseAdapter
 
@@ -24,7 +25,7 @@ class PurchaseFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         // Access the ViewModel from the Application class
-        viewModel = (requireActivity().application as InventoryApp).viewModel
+        viewModel = (requireActivity().application as InventoryApp).purchaseViewModel
     }
 
     override fun onCreateView(
@@ -50,6 +51,14 @@ class PurchaseFragment : Fragment() {
         viewModel.purchases.observe(viewLifecycleOwner) { purchases ->
             adapter = PurchaseAdapter(purchases)
             binding.purchasesRecyclerView.adapter = adapter
+        }
+        binding.addPurchaseButton.setOnClickListener {
+            // Handle the click event for the add button
+            findNavController().navigate(R.id.action_purchaseFragment_to_addPurchaseFragment)
+        }
+        binding.addPurchaseButton.setOnClickListener {
+            // Handle the click event for the add button
+            findNavController().navigate(R.id.action_purchaseFragment_to_addPurchaseFragment)
         }
     }
 }

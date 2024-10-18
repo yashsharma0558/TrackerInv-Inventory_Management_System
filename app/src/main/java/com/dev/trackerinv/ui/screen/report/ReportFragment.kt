@@ -1,4 +1,4 @@
-package com.dev.trackerinv.ui.screens.report
+package com.dev.trackerinv.ui.screen.report
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

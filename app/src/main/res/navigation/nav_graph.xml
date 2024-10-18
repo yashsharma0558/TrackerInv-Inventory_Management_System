@@ -1,19 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/saleFragment">
     <fragment
         android:id="@+id/saleFragment"
-        android:name="com.dev.trackerinv.ui.screens.sale.SaleFragment"
-        android:label="Sale" />
+        android:name="com.dev.trackerinv.ui.screen.sale.SaleFragment"
+        tools:layout="@layout/fragment_sale"
+        android:label="Sale" >
+        <action
+            android:id="@+id/action_saleFragment_to_addSaleFragment"
+            app:destination="@id/addSaleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addSaleFragment"
+        android:name="com.dev.trackerinv.ui.screen.sale.AddSaleFragment"
+        tools:layout="@layout/fragment_add_sale"
+        android:label="Add Sale"/>
     <fragment
         android:id="@+id/purchaseFragment"
-        android:name="com.dev.trackerinv.ui.screens.purchase.PurchaseFragment"
-        android:label="Purchase" />
+        android:name="com.dev.trackerinv.ui.screen.purchase.PurchaseFragment"
+        tools:layout="@layout/fragment_purchase"
+        android:label="Purchase" >
+        <action
+            android:id="@+id/action_purchaseFragment_to_addPurchaseFragment"
+            app:destination="@id/addPurchaseFragment" />
+    </fragment>
     <fragment
         android:id="@+id/reportFragment"
-        android:name="com.dev.trackerinv.ui.screens.report.ReportFragment"
+        android:name="com.dev.trackerinv.ui.screen.report.ReportFragment"
+        tools:layout="@layout/fragment_report"
         android:label="Report" />
+    <fragment
+        android:id="@+id/addPurchaseFragment"
+        android:name="com.dev.trackerinv.ui.screen.purchase.AddPurchaseFragment"
+        android:label="fragment_add_purchase"
+        tools:layout="@layout/fragment_add_purchase" />
 
 </navigation>

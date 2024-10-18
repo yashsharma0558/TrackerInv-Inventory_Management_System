@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screens.sale.SaleFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.screen.sale.SaleFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.recyclerview.widget.RecyclerView
@@ -12,5 +13,14 @@
         android:padding="16dp"
         android:orientation="vertical"
         android:id="@+id/salesRecyclerView" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addSaleButton"
+        android:scaleType="fitCenter"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="24dp"
+        android:src="@android:drawable/ic_input_add" />
 
 </FrameLayout>

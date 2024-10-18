@@ -9,17 +9,11 @@ import com.dev.trackerinv.data.db.AppDatabase
 import com.dev.trackerinv.domain.mapper.toDomainModel
 import com.dev.trackerinv.domain.mapper.toEntity
 
-class InventoryRepository(private val apiService: ApiService, private val database: AppDatabase) {
+class SaleRepository(private val apiService: ApiService, database: AppDatabase) {
 
 
     private val saleDao = database.saleDao()
-    private val purchaseDao = database.purchaseDao()
 
-    suspend fun syncAllPurchases() {
-        val purchases = apiService.getAllPurchases().map { it.toEntity() }
-        // Insert data into Room database
-        purchaseDao.insertAllPurchases(purchases)
-    }
 
     suspend fun syncAllSales() {
         val sales = apiService.getAllSales().map { it.toEntity() }
@@ -27,12 +21,9 @@ class InventoryRepository(private val apiService: ApiService, private val databa
         saleDao.insertAllSales(sales)
     }
 
-    fun getAllPurchasesFromRoom(): LiveData<List<Purchase>> {
-        return purchaseDao.getAllPurchases().map { it -> it.map { it.toDomainModel() } } // Fetches LiveData from the DAO
-    }
-
     fun getAllSalesFromRoom(): LiveData<List<Sale>> {
-        return saleDao.getAllSales().map { it -> it.map { it.toDomainModel() } } // Fetches LiveData from the DAO
+        return saleDao.getAllSales()
+            .map { it -> it.map { it.toDomainModel() } } // Fetches LiveData from the DAO
     }
 
     suspend fun getSaleById(id: String): Sale? {
@@ -46,8 +37,7 @@ class InventoryRepository(private val apiService: ApiService, private val databa
                 sale = newSale.body()?.toEntity()
                 saleDao.insertSale(sale!!)
                 return sale.toDomainModel()
-            }
-            else{
+            } else {
                 println("api failed")
                 return null
             }
@@ -56,24 +46,6 @@ class InventoryRepository(private val apiService: ApiService, private val databa
         return sale.toDomainModel()
     }
 
-    suspend fun getPurchaseById(id: String): Purchase? {
-        var purchase = purchaseDao.getPurchaseById(id)
-        if (purchase == null) {
-            val newPurchase = apiService.getPurchaseById(id)
-            if (newPurchase.isSuccessful) {
-                println("fetched from api")
-                purchase = newPurchase.body()?.toEntity()
-                purchaseDao.insertPurchase(purchase!!)
-                return purchase.toDomainModel()
-            }
-            else{
-                println("api failed")
-                return null
-            }
-        }
-        println("fetched from room")
-        return purchase.toDomainModel()
-    }
 
     suspend fun addSale(sale: Sale, showToast: ((String) -> (Unit))) {
         val existingSale = saleDao.getSaleById(sale.id)
@@ -96,24 +68,5 @@ class InventoryRepository(private val apiService: ApiService, private val databa
 
     }
 
-    suspend fun addPurchase(purchase: Purchase, showToast: ((String) -> (Unit))) {
-        val existingPurchase = purchaseDao.getPurchaseById(purchase.id)
-
-        if (existingPurchase == null) {
-
-            if (apiService.createPurchase(purchase).isSuccessful) {
-                purchaseDao.insertPurchase(purchase.toEntity())
-                showToast("Purchase Added")
-                println("API PURCHASE SUCCESSFUL")
-            } else {
-                showToast("Purchase Not Added")
-                println("API PURCHASE FAILED")
-            }
-        } else {
-            showToast("Purchase Already Exists")
-            println("PURCHASE ALREADY EXISTS")
-        }
-
-    }
 }
 

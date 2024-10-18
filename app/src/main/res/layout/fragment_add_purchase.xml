@@ -1,0 +1,148 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:scrollbars="vertical">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Image Upload Field -->
+            <EditText
+                android:id="@+id/etImage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Image URL"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                android:padding="16dp"/>
+
+            <!-- Invoice Number -->
+            <EditText
+                android:id="@+id/etInvoiceNo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Invoice No"
+                app:layout_constraintTop_toBottomOf="@id/etImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="16dp"/>
+
+            <!-- Invoice Date -->
+            <EditText
+                android:id="@+id/etInvoiceDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Invoice Date"
+                app:layout_constraintTop_toBottomOf="@id/etInvoiceNo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="16dp"/>
+
+            <!-- Supplier Name -->
+            <EditText
+                android:id="@+id/etSupplierName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Supplier Name"
+                app:layout_constraintTop_toBottomOf="@id/etInvoiceDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="16dp"/>
+
+            <!-- Supplier Phone -->
+            <EditText
+                android:id="@+id/etSupplierPhone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Supplier Phone"
+                android:inputType="phone"
+                app:layout_constraintTop_toBottomOf="@id/etSupplierName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="16dp"/>
+
+            <!-- Quantity -->
+            <EditText
+                android:id="@+id/etQuantity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Quantity"
+                android:inputType="number"
+                app:layout_constraintTop_toBottomOf="@id/etSupplierPhone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="16dp"/>
+
+            <!-- GST Fields -->
+            <EditText
+                android:id="@+id/etCGST"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="CGST"
+                android:inputType="numberDecimal"
+                app:layout_constraintTop_toBottomOf="@id/etQuantity"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="16dp"/>
+
+            <EditText
+                android:id="@+id/etSGST"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="SGST"
+                android:inputType="numberDecimal"
+                app:layout_constraintTop_toBottomOf="@id/etCGST"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="16dp"/>
+
+            <EditText
+                android:id="@+id/etIGST"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="IGST"
+                android:inputType="numberDecimal"
+                app:layout_constraintTop_toBottomOf="@id/etSGST"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="16dp"/>
+
+            <!-- Price per Unit -->
+            <EditText
+                android:id="@+id/etPricePerUnit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Price per Unit"
+                android:inputType="numberDecimal"
+                app:layout_constraintTop_toBottomOf="@id/etIGST"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="16dp"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+    <!-- Floating Action Button with Check Icon -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:elevation="8dp"
+        android:src="@android:drawable/ic_input_add"
+        android:layout_gravity="end|bottom"
+        android:contentDescription="Submit"/>
+
+</FrameLayout>

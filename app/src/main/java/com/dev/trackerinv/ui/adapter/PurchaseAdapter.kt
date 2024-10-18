@@ -11,7 +11,6 @@ import com.dev.trackerinv.data.model.Purchase
 class PurchaseAdapter(private val purchaseList: List<Purchase>) : RecyclerView.Adapter<PurchaseAdapter.PurchaseViewHolder>() {
 
     class PurchaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val id: TextView = itemView.findViewById(R.id.id)
         val invoiceNumber: TextView = itemView.findViewById(R.id.invoiceNumber)
         val invoiceDate: TextView = itemView.findViewById(R.id.invoiceDate)
         val supplierName: TextView = itemView.findViewById(R.id.supplierName)
@@ -26,7 +25,6 @@ class PurchaseAdapter(private val purchaseList: List<Purchase>) : RecyclerView.A
 
     override fun onBindViewHolder(holder: PurchaseViewHolder, position: Int) {
         val purchase = purchaseList[position]
-        holder.id.text = purchase.id
         holder.invoiceNumber.text = purchase.inv_no
         holder.invoiceDate.text = purchase.inv_date
         holder.supplierName.text = purchase.sup_name

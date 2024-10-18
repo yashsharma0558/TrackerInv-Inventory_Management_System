@@ -3,14 +3,20 @@ package com.dev.trackerinv.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.dev.trackerinv.data.repository.InventoryRepository
 
-class InventoryViewModelFactory(private val repository: InventoryRepository) : ViewModelProvider.Factory {
+class InventoryViewModelFactory<T : ViewModel, R>(
+    private val viewModelClass: Class<T>,
+    private val repository: R
+) : ViewModelProvider.Factory {
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(InventoryViewModel::class.java)) {
+        // Check if the ViewModel class matches the one we expect
+        if (modelClass.isAssignableFrom(viewModelClass)) {
             @Suppress("UNCHECKED_CAST")
-            return InventoryViewModel(repository) as T
+            return viewModelClass.getConstructor(repository!!::class.java)
+                .newInstance(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+

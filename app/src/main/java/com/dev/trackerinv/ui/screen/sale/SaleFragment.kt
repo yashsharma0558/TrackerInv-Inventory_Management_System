@@ -1,18 +1,19 @@
-package com.dev.trackerinv.ui.screens.sale
+package com.dev.trackerinv.ui.screen.sale
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.trackerinv.InventoryApp
 import com.dev.trackerinv.R
 import com.dev.trackerinv.databinding.FragmentSaleBinding
 import com.dev.trackerinv.ui.adapter.SaleAdapter
-import com.dev.trackerinv.ui.viewmodel.InventoryViewModel
+import com.dev.trackerinv.ui.viewmodel.SaleViewModel
 
 class SaleFragment : Fragment() {
-    private lateinit var viewModel: InventoryViewModel
+    private lateinit var viewModel: SaleViewModel
     private lateinit var binding: FragmentSaleBinding
     private lateinit var adapter: SaleAdapter
 
@@ -20,7 +21,7 @@ class SaleFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         // Access the ViewModel from the Application class
-        viewModel = (requireActivity().application as InventoryApp).viewModel
+        viewModel = (requireActivity().application as InventoryApp).saleViewModel
     }
 
     override fun onCreateView(
@@ -42,6 +43,10 @@ class SaleFragment : Fragment() {
         viewModel.sales.observe(viewLifecycleOwner) { sales ->
             adapter = SaleAdapter(sales)
             binding.salesRecyclerView.adapter = adapter
+        }
+        binding.addSaleButton.setOnClickListener {
+            // Handle the click event for the add button
+            findNavController().navigate(R.id.action_saleFragment_to_addSaleFragment)
         }
     }
 }
