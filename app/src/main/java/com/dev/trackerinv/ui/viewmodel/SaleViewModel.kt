@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.dev.trackerinv.data.model.Platform
 import com.dev.trackerinv.data.model.Sale
 import com.dev.trackerinv.data.repository.SaleRepository
+import com.dev.trackerinv.domain.usecase.FilterSalesByDateUseCase
 import kotlinx.coroutines.launch
 
 class SaleViewModel(private val repository: SaleRepository) : ViewModel() {
@@ -29,12 +30,27 @@ class SaleViewModel(private val repository: SaleRepository) : ViewModel() {
     private val _saleResponse = MutableLiveData<Sale?>()
     val saleResponse: MutableLiveData<Sale?> get() = _saleResponse
 
+    val filteredSales = MutableLiveData<List<Sale>>()
+
     val platformOptions: List<Platform> = Platform.entries
 
 
     fun createSale(sale: Sale) = viewModelScope.launch {
         repository.addSale(sale) { message ->
             _toastMessage.value = message
+        }
+    }
+
+
+
+    fun filterSalesByDate(startDate: String, endDate: String) {
+        if (startDate.isEmpty() || endDate.isEmpty()) {
+            filteredSales.postValue(sales.value)
+            return
+        }
+        viewModelScope.launch {
+            val filteredSale = FilterSalesByDateUseCase(repository).invoke(startDate, endDate)
+            filteredSales.postValue(filteredSale)
         }
     }
 

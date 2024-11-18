@@ -7,6 +7,7 @@ import com.dev.trackerinv.data.model.Purchase
 import com.dev.trackerinv.data.model.Sale
 import com.dev.trackerinv.data.api.ApiService
 import com.dev.trackerinv.data.db.AppDatabase
+import com.dev.trackerinv.data.db.entity.SaleEntity
 import com.dev.trackerinv.domain.mapper.toDomainModel
 import com.dev.trackerinv.domain.mapper.toEntity
 
@@ -25,6 +26,11 @@ class SaleRepository(private val apiService: ApiService, database: AppDatabase) 
     fun getAllSalesFromRoom(): LiveData<List<Sale>> {
         return saleDao.getAllSales()
             .map { it -> it.map { it.toDomainModel() } } // Fetches LiveData from the DAO
+    }
+
+    suspend fun getSalesByDateRange(startDate: String, endDate: String): List<Sale> {
+        return saleDao.getSalesByDateRange(startDate, endDate)
+            .map { it.toDomainModel() }
     }
 
     suspend fun getSaleById(id: String): Sale? {

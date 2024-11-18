@@ -12,7 +12,7 @@ interface SaleDao {
     suspend fun insertAllSales(sales: List<SaleEntity>)
 
     @Query("SELECT * FROM sale")
-    fun getAllSales(): LiveData<List<SaleEntity>> // LiveData to observe changes
+    fun getAllSales(): LiveData<List<SaleEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSale(sale: SaleEntity)
@@ -22,4 +22,8 @@ interface SaleDao {
 
     @Delete
     suspend fun deleteSale(sale: SaleEntity)
+
+    @Query("SELECT * FROM sale WHERE date BETWEEN :startDate AND :endDate")
+    suspend fun getSalesByDateRange(startDate: String, endDate: String): List<SaleEntity>
+
 }
