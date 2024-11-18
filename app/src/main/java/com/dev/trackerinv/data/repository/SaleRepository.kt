@@ -1,5 +1,6 @@
 package com.dev.trackerinv.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.dev.trackerinv.data.model.Purchase
@@ -57,6 +58,7 @@ class SaleRepository(private val apiService: ApiService, database: AppDatabase) 
                 showToast("Sale Added")
                 println("API SALE SUCCESSFUL")
             } else {
+                Log.e("SaleRepository", "addSale: " + apiService.createSale(sale).message())
                 showToast("Sale Not Added")
                 println("API SALE FAILED")
             }

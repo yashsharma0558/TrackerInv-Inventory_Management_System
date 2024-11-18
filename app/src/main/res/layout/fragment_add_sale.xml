@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:scrollbars="vertical">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -17,176 +18,201 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
+            app:layout_constraintTop_toTopOf="parent">
 
             <!-- Product Name -->
             <EditText
                 android:id="@+id/etProductName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Product Name"
                 android:layout_marginTop="16dp"
-                android:inputType="text"
+                android:hint="Product Name"
                 android:importantForAccessibility="yes"
+                android:inputType="text"
                 android:maxLines="1"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Customer Name -->
+            <TextView
+                android:id="@+id/tvChooseImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="16dp"
+                android:text="Choose an Image..."
+                app:layout_constraintEnd_toStartOf="@+id/btnPickImage"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/parent"
+                app:layout_constraintTop_toBottomOf="@+id/etProductName" />
+
+            <Button
+                android:id="@+id/btnPickImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick Image"
+                android:layout_marginStart="15dp"
+                app:layout_constraintEnd_toStartOf="@+id/parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tvChooseImage"
+                app:layout_constraintTop_toBottomOf="@+id/etProductName" />
+
             <EditText
                 android:id="@+id/etCustomerName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Customer Name"
-                android:layout_marginTop="16dp"
                 android:inputType="text"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/etProductName"
+                app:layout_constraintTop_toBottomOf="@id/btnPickImage"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                tools:layout_editor_absoluteY="93dp" />
 
             <!-- Customer Phone -->
             <EditText
                 android:id="@+id/etCustomerPhone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Customer Phone"
                 android:layout_marginTop="16dp"
+                android:hint="Customer Phone"
                 android:inputType="phone"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/etCustomerName"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/etCustomerName" />
 
             <!-- Platform -->
             <Spinner
                 android:id="@+id/etPlatform"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Platform"
                 android:layout_marginTop="16dp"
+                android:hint="Platform"
                 android:inputType="text"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/etCustomerPhone"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/etCustomerPhone" />
 
             <!-- Date -->
-            <EditText
+            <TextView
                 android:id="@+id/etDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Date"
                 android:layout_marginTop="16dp"
+                android:hint="Date"
+                android:textSize="20sp"
                 android:inputType="date"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/etPlatform"
+                android:drawableEnd="@drawable/ic_datepicker"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/etPlatform" />
 
             <!-- Stock ID -->
             <EditText
                 android:id="@+id/etStockId"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Stock ID"
                 android:layout_marginTop="16dp"
+                android:hint="Stock ID"
                 android:inputType="text"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/etDate"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/etDate" />
 
             <!-- Quantity -->
             <EditText
                 android:id="@+id/etQuantity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Quantity"
                 android:layout_marginTop="16dp"
+                android:hint="Quantity"
                 android:inputType="number"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/etStockId"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/etStockId" />
 
             <!-- Selling Price (SP) -->
             <EditText
                 android:id="@+id/etSP"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Selling Price"
                 android:layout_marginTop="16dp"
+                android:hint="Selling Price"
                 android:inputType="numberDecimal"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/etQuantity"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/etQuantity" />
 
             <!-- CGST -->
             <EditText
                 android:id="@+id/etCGST"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="CGST"
                 android:layout_marginTop="16dp"
+                android:hint="CGST"
                 android:inputType="numberDecimal"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/etSP"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/etSP" />
 
             <!-- SGST -->
             <EditText
                 android:id="@+id/etSGST"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="SGST"
                 android:layout_marginTop="16dp"
+                android:hint="SGST"
                 android:inputType="numberDecimal"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/etCGST"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/etCGST" />
 
             <!-- IGST -->
             <EditText
                 android:id="@+id/etIGST"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="IGST"
                 android:layout_marginTop="16dp"
+                android:hint="IGST"
                 android:inputType="numberDecimal"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/etSGST"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/etSGST" />
             <!-- Delivery Channel -->
-            <EditText
+            <Spinner
                 android:id="@+id/etDeliveryChannel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Delivery Channel"
                 android:layout_marginTop="16dp"
+                android:hint="Delivery Channel"
                 android:inputType="text"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/etIGST"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/etIGST" />
 
             <!-- Delivery and Other Expenses -->
             <EditText
                 android:id="@+id/etDeliveryExpenses"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Delivery and Other Expenses"
                 android:layout_marginTop="16dp"
+                android:hint="Delivery and Other Expenses"
                 android:inputType="numberDecimal"
                 android:maxLines="1"
-                app:layout_constraintTop_toBottomOf="@id/etDeliveryChannel"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/etDeliveryChannel" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

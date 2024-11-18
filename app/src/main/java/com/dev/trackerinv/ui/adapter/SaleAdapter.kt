@@ -3,10 +3,12 @@ package com.dev.trackerinv.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dev.trackerinv.R
 import com.dev.trackerinv.data.model.Sale
+import com.dev.trackerinv.ui.utils.ImagePickerUtil
 
 class SaleAdapter(private val salesList: List<Sale>) : RecyclerView.Adapter<SaleAdapter.SaleViewHolder>() {
 
@@ -16,6 +18,7 @@ class SaleAdapter(private val salesList: List<Sale>) : RecyclerView.Adapter<Sale
         val customerPhone: TextView = itemView.findViewById(R.id.customerPhone)
         val platform: TextView = itemView.findViewById(R.id.platform)
         val date: TextView = itemView.findViewById(R.id.date)
+        val image: ImageView = itemView.findViewById(R.id.productImage)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SaleViewHolder {
@@ -30,6 +33,8 @@ class SaleAdapter(private val salesList: List<Sale>) : RecyclerView.Adapter<Sale
         holder.customerPhone.text = sale.cus_ph
         holder.platform.text = sale.platform
         holder.date.text = sale.date
+        val bitmap = ImagePickerUtil.base64ToBitmap(sale.image)
+        holder.image.setImageBitmap(bitmap)
     }
 
     override fun getItemCount(): Int {
