@@ -23,4 +23,7 @@ interface PurchaseDao {
 
     @Delete
     suspend fun deletePurchase(purchase: PurchaseEntity)
+
+    @Query("SELECT * FROM purchase WHERE invDate BETWEEN :startDate AND :endDate")
+    suspend fun getPurchasesByDate(startDate: String, endDate: String): List<PurchaseEntity>
 }

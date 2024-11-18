@@ -15,39 +15,54 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <!-- Image Upload Field -->
-            <EditText
-                android:id="@+id/etImage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="Image URL"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                android:padding="16dp"/>
-
             <!-- Invoice Number -->
             <EditText
                 android:id="@+id/etInvoiceNo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Invoice No"
-                app:layout_constraintTop_toBottomOf="@id/etImage"
-                app:layout_constraintStart_toStartOf="parent"
+                android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:padding="16dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Invoice Date -->
-            <EditText
+            <TextView
                 android:id="@+id/etInvoiceDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Invoice Date"
-                app:layout_constraintTop_toBottomOf="@id/etInvoiceNo"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                android:hint="Date"
+                android:textSize="20sp"
+                android:inputType="date"
+                android:maxLines="1"
+                android:drawableEnd="@drawable/ic_datepicker"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:padding="16dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etInvoiceNo"/>
+            <!-- Customer Name -->
+            <TextView
+                android:id="@+id/tvChooseImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="16dp"
+                android:text="Choose an Image..."
+                app:layout_constraintEnd_toStartOf="@+id/btnPickImage"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/parent"
+                app:layout_constraintTop_toBottomOf="@+id/etInvoiceDate" />
+
+            <Button
+                android:id="@+id/btnPickImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick Image"
+                android:layout_marginStart="15dp"
+                app:layout_constraintEnd_toStartOf="@+id/parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tvChooseImage"
+                app:layout_constraintTop_toBottomOf="@+id/etInvoiceDate" />
 
             <!-- Supplier Name -->
             <EditText
@@ -55,7 +70,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Supplier Name"
-                app:layout_constraintTop_toBottomOf="@id/etInvoiceDate"
+                app:layout_constraintTop_toBottomOf="@id/btnPickImage"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:padding="16dp"/>

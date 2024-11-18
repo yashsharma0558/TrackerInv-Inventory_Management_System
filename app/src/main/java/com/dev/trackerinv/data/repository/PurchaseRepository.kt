@@ -25,6 +25,10 @@ class PurchaseRepository(private val apiService: ApiService, database: AppDataba
             .map { it -> it.map { it.toDomainModel() } } // Fetches LiveData from the DAO
     }
 
+    suspend fun getPurchasesByDateRange(startDate: String, endDate: String): List<Purchase> {
+        return purchaseDao.getPurchasesByDate(startDate, endDate).map { it.toDomainModel() }
+    }
+
 
     suspend fun getPurchaseById(id: String): Purchase? {
         var purchase = purchaseDao.getPurchaseById(id)

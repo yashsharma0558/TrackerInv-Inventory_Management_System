@@ -1,5 +1,6 @@
 package com.dev.trackerinv.ui.screen.purchase
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +13,16 @@ import com.dev.trackerinv.data.model.Platform
 import com.dev.trackerinv.data.model.Purchase
 import com.dev.trackerinv.databinding.FragmentAddPurchaseBinding
 import com.dev.trackerinv.domain.usecase.ValidateAddPurchaseUseCase
+import com.dev.trackerinv.ui.utils.DatePickerUtil
+import com.dev.trackerinv.ui.utils.ImagePickerUtil
 import com.dev.trackerinv.ui.viewmodel.PurchaseViewModel
 import java.util.UUID
 
 class AddPurchaseFragment : Fragment() {
     private lateinit var binding: FragmentAddPurchaseBinding
     private lateinit var viewModel: PurchaseViewModel
+    private lateinit var imagePickerUtil: ImagePickerUtil
+    private var selectedImageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,14 +43,37 @@ class AddPurchaseFragment : Fragment() {
         binding.fabSubmit.setOnClickListener {
             onSubmitButtonClicked()
         }
+        // Initialize image picker
+        imagePickerUtil = ImagePickerUtil(this)
+        imagePickerUtil.initialize { uri ->
+            uri?.let {
+                selectedImageUri = it
+                // Display selected image
+                val imageName = ImagePickerUtil.getFileNameFromUri(requireContext(), it)
+                binding.tvChooseImage.text = imageName
+            }
+        }
+        // Set up button to open gallery
+        binding.btnPickImage.setOnClickListener {
+            imagePickerUtil.pickImageFromGallery()
+        }
+
+        binding.etInvoiceDate.setOnClickListener {
+            DatePickerUtil.showDatePicker(requireContext()){
+                    date ->
+                binding.etInvoiceDate.text = date
+            }
+        }
+
     }
 
     fun onSubmitButtonClicked() {
         // Use selectedPlatform in the Sale object
-
+        val base64Image =
+            selectedImageUri?.let { ImagePickerUtil.convertUriToBase64(requireContext(), it) }
         val purchase = Purchase(
             id = UUID.randomUUID().toString(),
-            image = "Something",
+            image = base64Image!!,
             inv_no = binding.etInvoiceNo.text.toString(),
             inv_date = binding.etInvoiceDate.text.toString(),
             sup_name = binding.etSupplierName.text.toString(),

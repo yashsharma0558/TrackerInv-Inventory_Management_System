@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.dev.trackerinv.data.model.Purchase
 import com.dev.trackerinv.data.model.Sale
 import com.dev.trackerinv.data.repository.PurchaseRepository
+import com.dev.trackerinv.domain.usecase.FilterPurchasesByDateUseCase
+import com.dev.trackerinv.domain.usecase.FilterSalesByDateUseCase
 import kotlinx.coroutines.launch
 
 class PurchaseViewModel(private val repository: PurchaseRepository) : ViewModel() {
@@ -24,6 +26,8 @@ class PurchaseViewModel(private val repository: PurchaseRepository) : ViewModel(
 
     val purchases: LiveData<List<Purchase>> = repository.getAllPurchasesFromRoom()
 
+    val filteredPurchases = MutableLiveData<List<Purchase>>()
+
     private val _toastMessage = MutableLiveData<String>()
     val toastMessage: LiveData<String> get() = _toastMessage
 
@@ -34,6 +38,17 @@ class PurchaseViewModel(private val repository: PurchaseRepository) : ViewModel(
     fun createPurchase(purchase: Purchase) = viewModelScope.launch {
         repository.addPurchase(purchase) { message ->
             _toastMessage.value = message
+        }
+    }
+
+    fun filterPurchasesByDate(startDate: String, endDate: String) {
+        if (startDate.isEmpty() || endDate.isEmpty()) {
+            filteredPurchases.postValue(purchases.value)
+            return
+        }
+        viewModelScope.launch {
+            val filteredPurchase = FilterPurchasesByDateUseCase(repository).invoke(startDate, endDate)
+            filteredPurchases.postValue(filteredPurchase)
         }
     }
 
