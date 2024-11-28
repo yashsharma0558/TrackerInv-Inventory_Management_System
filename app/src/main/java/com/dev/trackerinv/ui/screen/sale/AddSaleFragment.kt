@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.dev.trackerinv.InventoryApp
 import com.dev.trackerinv.data.model.GST
-import com.dev.trackerinv.data.model.Platform
+import com.dev.trackerinv.domain.model.Platform
 import com.dev.trackerinv.data.model.Sale
 import com.dev.trackerinv.databinding.FragmentAddSaleBinding
 import com.dev.trackerinv.domain.usecase.ValidateAddSaleUseCase
@@ -86,10 +86,14 @@ class AddSaleFragment : Fragment() {
         // Use selectedPlatform in the Sale object
         val base64Image =
             selectedImageUri?.let { ImagePickerUtil.convertUriToBase64(requireContext(), it) }
+        if (base64Image == null){
+            Toast.makeText(requireContext(), "Please select an image", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val sale = Sale(
             id = UUID.randomUUID().toString(),
-            image = base64Image!!,
+            image = base64Image,
             platform = Platform.entries[binding.etPlatform.selectedItemPosition].toString(),
             date = binding.etDate.text.toString(),
             stock_id = binding.etStockId.text.toString(),

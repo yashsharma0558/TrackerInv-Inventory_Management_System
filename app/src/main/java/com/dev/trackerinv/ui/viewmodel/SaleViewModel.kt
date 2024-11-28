@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dev.trackerinv.data.model.Platform
+import com.dev.trackerinv.domain.model.Platform
 import com.dev.trackerinv.data.model.Sale
 import com.dev.trackerinv.data.repository.SaleRepository
 import com.dev.trackerinv.domain.usecase.FilterSalesByDateUseCase

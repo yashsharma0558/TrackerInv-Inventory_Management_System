@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.dev.trackerinv"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -63,5 +63,10 @@ dependencies {
 
     ksp(libs.androidx.room.compiler)
 
+    //ApachePOI
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
+    implementation("org.apache.poi:poi:5.2.3")
 
 }
+
+

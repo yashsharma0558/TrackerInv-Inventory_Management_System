@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.dev.trackerinv.InventoryApp
 import com.dev.trackerinv.data.model.GST
-import com.dev.trackerinv.data.model.Platform
 import com.dev.trackerinv.data.model.Purchase
 import com.dev.trackerinv.databinding.FragmentAddPurchaseBinding
 import com.dev.trackerinv.domain.usecase.ValidateAddPurchaseUseCase
@@ -59,8 +58,7 @@ class AddPurchaseFragment : Fragment() {
         }
 
         binding.etInvoiceDate.setOnClickListener {
-            DatePickerUtil.showDatePicker(requireContext()){
-                    date ->
+            DatePickerUtil.showDatePicker(requireContext()) { date ->
                 binding.etInvoiceDate.text = date
             }
         }
@@ -71,9 +69,13 @@ class AddPurchaseFragment : Fragment() {
         // Use selectedPlatform in the Sale object
         val base64Image =
             selectedImageUri?.let { ImagePickerUtil.convertUriToBase64(requireContext(), it) }
+        if (base64Image == null){
+            Toast.makeText(requireContext(), "Please select an image", Toast.LENGTH_SHORT).show()
+            return
+        }
         val purchase = Purchase(
             id = UUID.randomUUID().toString(),
-            image = base64Image!!,
+            image = base64Image,
             inv_no = binding.etInvoiceNo.text.toString(),
             inv_date = binding.etInvoiceDate.text.toString(),
             sup_name = binding.etSupplierName.text.toString(),

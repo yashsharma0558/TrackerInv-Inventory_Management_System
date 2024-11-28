@@ -1,4 +1,4 @@
-package com.dev.trackerinv.data.model
+package com.dev.trackerinv.domain.model
 
 enum class Platform(val displayName: String) {
     AMAZON("Amazon"),

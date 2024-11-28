@@ -31,11 +31,36 @@
         android:id="@+id/reportFragment"
         android:name="com.dev.trackerinv.ui.screen.report.ReportFragment"
         tools:layout="@layout/fragment_report"
-        android:label="Report" />
+        android:label="Report" >
+        <action
+            android:id="@+id/action_reportFragment_to_financialReportFragment"
+            app:destination="@id/financialReportFragment" />
+        <action
+            android:id="@+id/action_reportFragment_to_generateReportFragment"
+            app:destination="@id/generateReportFragment" />
+        <action
+            android:id="@+id/action_reportFragment_to_inventoryHealthFragment"
+            app:destination="@id/inventoryHealthFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addPurchaseFragment"
         android:name="com.dev.trackerinv.ui.screen.purchase.AddPurchaseFragment"
         android:label="fragment_add_purchase"
         tools:layout="@layout/fragment_add_purchase" />
+    <fragment
+        android:id="@+id/inventoryHealthFragment"
+        android:name="com.dev.trackerinv.ui.screen.report.invhealth.InventoryHealthFragment"
+        android:label="fragment_inventory_health"
+        tools:layout="@layout/fragment_inventory_health" />
+    <fragment
+        android:id="@+id/generateReportFragment"
+        android:name="com.dev.trackerinv.ui.screen.report.generate.GenerateReportFragment"
+        android:label="fragment_generate_report"
+        tools:layout="@layout/fragment_generate_report" />
+    <fragment
+        android:id="@+id/financialReportFragment"
+        android:name="com.dev.trackerinv.ui.screen.report.financial.FinancialReportFragment"
+        android:label="fragment_financial_report"
+        tools:layout="@layout/fragment_financial_report" />
 
 </navigation>

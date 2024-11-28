@@ -5,56 +5,59 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.dev.trackerinv.R
+import com.dev.trackerinv.databinding.FragmentReportBinding
+import com.dev.trackerinv.domain.model.ReportItem
+import com.dev.trackerinv.ui.adapter.ReportAdapter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ReportFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ReportFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentReportBinding
+    private lateinit var reportAdapter: ReportAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_report, container, false)
+    ): View {
+        binding = FragmentReportBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ReportFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ReportFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val reportItems = ReportItem.values().toList() // Enum values as list
+
+        reportAdapter = ReportAdapter(reportItems) { reportItem ->
+            handleReportItemClick(reportItem)
+        }
+
+        binding.recyclerView.apply {
+            layoutManager = GridLayoutManager(requireContext(), 2) // 2 columns for grid layout
+            adapter = reportAdapter
+        }
+    }
+
+    private fun handleReportItemClick(reportItem: ReportItem) {
+        when (reportItem) {
+            ReportItem.GENERATE_REPORT -> {
+//                Toast.makeText(requireContext(), "Generate Report Clicked", Toast.LENGTH_SHORT).show()
+                // Navigate or perform logic
+                findNavController().navigate(R.id.action_reportFragment_to_generateReportFragment)
             }
+            ReportItem.INVENTORY_HEALTH -> {
+//                Toast.makeText(requireContext(), "Inventory Health Clicked", Toast.LENGTH_SHORT).show()
+                // Navigate or perform logic
+                findNavController().navigate(R.id.action_reportFragment_to_inventoryHealthFragment)
+            }
+            ReportItem.FINANCIAL_REPORT -> {
+//                Toast.makeText(requireContext(), "Financial Report Clicked", Toast.LENGTH_SHORT).show()
+                // Navigate or perform logic
+                findNavController().navigate(R.id.action_reportFragment_to_financialReportFragment)
+            }
+        }
     }
 }
