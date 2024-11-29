@@ -1,60 +1,173 @@
 package com.dev.trackerinv.ui.screen.report.invhealth
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.dev.trackerinv.R
+import android.widget.ArrayAdapter
+import com.dev.trackerinv.InventoryApp
+import com.dev.trackerinv.databinding.FragmentInventoryHealthBinding
+import com.dev.trackerinv.domain.model.ChartType
+import com.dev.trackerinv.ui.utils.DatePickerUtil.showDatePicker
+import com.dev.trackerinv.ui.viewmodel.ReportViewModel
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.PercentFormatter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [InventoryHealthFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class InventoryHealthFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var viewModel: ReportViewModel
+    private lateinit var binding: FragmentInventoryHealthBinding
+    private var startDate: String = ""
+    private var endDate: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        viewModel = (requireActivity().application as InventoryApp).reportViewModel
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_inventory_health, container, false)
+        binding = FragmentInventoryHealthBinding.inflate(inflater, container, false)
+        setupChartDropdown()
+        val barChart = binding.barChart
+        val pieChart = binding.pieChart
+        // Set up date pickers
+        binding.startDatePicker.setOnClickListener {
+            showDatePicker { date ->
+                startDate = date
+                binding.startDatePicker.text = date
+            }
+        }
+
+        binding.endDatePicker.setOnClickListener {
+            showDatePicker { date ->
+                endDate = date
+                binding.endDatePicker.text = date
+            }
+        }
+        binding.generateChart.setOnClickListener {
+            val startDate = binding.startDatePicker.text.toString()
+            val endDate = binding.endDatePicker.text.toString()
+            val selectedChart = binding.spinnerChartType.selectedItem.toString()
+            if(selectedChart == ChartType.BAR_CHART.toString()){
+                barChart.visibility = View.VISIBLE
+                pieChart.visibility = View.GONE
+                viewModel.fetchBarChartData(
+                    startDate = startDate,
+                    endDate = endDate,
+                    onSuccess = { barChartData ->
+                        // Step 1: Map sales and purchases data to BarEntries
+                        val barEntries = barChartData.salesQuantities.mapIndexed { index, salesQuantity ->
+                            val purchaseQuantity = barChartData.purchaseQuantities.getOrNull(index) ?: 0
+                            BarEntry(index.toFloat(), floatArrayOf(salesQuantity.toFloat(), purchaseQuantity.toFloat()))
+                        }
+
+                        // Step 2: Prepare data set with red and blue colors
+                        val barDataSet = BarDataSet(barEntries, "Inventory Status").apply {
+                            stackLabels = arrayOf("Sales", "Purchases")
+                            colors = listOf(
+                                Color.RED,  // Red for Sales
+                                Color.CYAN  // Blue for Purchases
+                            )
+                        }
+
+                        // Step 3: Create BarData
+                        val barData = BarData(barDataSet)
+                        barData.barWidth = 0.4f // Adjust the width of bars if needed
+
+                        val xAxis = barChart.xAxis
+                        xAxis.position = XAxis.XAxisPosition.BOTTOM // Position x-axis at the bottom
+                        xAxis.valueFormatter = IndexAxisValueFormatter(barChartData.labels) // Use dates as labels
+                        xAxis.granularity = 1f // Ensure labels are evenly spaced
+
+                        // Step 5: Configure y-axis
+                        barChart.axisLeft.axisMinimum = 0f // Start y-axis from 0
+                        barChart.axisRight.isEnabled = false // Disable the right y-axis
+
+                        // Step 6: Set up chart and display data
+                        barChart.data = barData
+                        barChart.description.isEnabled = false // Disable chart description
+                        barChart.setFitBars(true) // Ensure bars fit properly
+                        barChart.invalidate() // Refresh the chart
+
+                        barChart.animateY(1000, Easing.EaseInOutQuad) // Animate the y-axis values over 1 second
+                        barChart.animateX(1000, Easing.EaseInOutQuad) // Optionally animate the x-axis (horizontal) as well
+                    },
+                    onError = { exception ->
+                        // Handle error (e.g., show a toast or dialog)
+                        Log.e("BarChartError", "Error: ${exception.message}")
+                    }
+                )
+            } else {
+                pieChart.visibility = View.VISIBLE
+                barChart.visibility = View.GONE
+                viewModel.fetchPieChartData(
+                    startDate = startDate,
+                    endDate = endDate,
+                    onSuccess = { pieChartData ->
+                        // Prepare entries for the PieChart
+                        val pieEntries = listOf(
+                            PieEntry(pieChartData.totalSales.toFloat(), "Sales"),
+                            PieEntry(pieChartData.totalPurchases.toFloat(), "Purchases")
+                        )
+
+                        // Create PieDataSet
+                        val pieDataSet = PieDataSet(pieEntries, "Inventory Status").apply {
+                            colors = listOf(Color.RED, Color.CYAN) // Red for Sales, Cyan for Purchases
+                            sliceSpace = 2f                       // Space between slices
+                            valueTextColor = Color.WHITE          // Text color on slices
+                            valueTextSize = 14f                   // Text size
+                        }
+
+                        // Create PieData
+                        val pieData = PieData(pieDataSet).apply {
+                            setValueFormatter(PercentFormatter()) // Display values as percentages
+                        }
+
+                        // Configure PieChart
+                        pieChart.data = pieData
+                        pieChart.description.isEnabled = false
+                        pieChart.isDrawHoleEnabled = true // Draw a hole in the center
+                        pieChart.setUsePercentValues(true) // Display percentages
+                        pieChart.centerText = "Inventory Health"
+                        pieChart.animateY(1000, Easing.EaseInOutQuad) // Animation
+
+                        pieChart.invalidate() // Refresh the PieChart
+                    },
+                    onError = { exception ->
+                        Log.e("PieChartError", "Error: ${exception.message}")
+                    }
+                )
+
+            }
+
+        }
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment InventoryHealthFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            InventoryHealthFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun showDatePicker(onDateSelected: (String) -> Unit) {
+        showDatePicker(requireContext(), onDateSelected)
     }
+
+
+    private fun setupChartDropdown() {
+        val chartNames = viewModel.chartType.map { it.displayName }
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, chartNames)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerChartType.adapter = adapter
+    }
+
 }

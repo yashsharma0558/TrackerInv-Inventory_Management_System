@@ -1,14 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screen.report.invhealth.InventoryHealthFragment">
+    android:padding="16dp"
+    tools:context=".ui.screen.report.generate.GenerateReportFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/startDatePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:drawableEnd="@drawable/ic_datepicker"
+                android:hint="Start Date"
+                android:inputType="date"
+                android:maxLines="1"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/endDatePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:drawableEnd="@drawable/ic_datepicker"
+                android:hint="End Date"
+                android:inputType="date"
+                android:maxLines="1"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/spinnerChartType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="Type of Chart"
+                android:inputType="text"
+                android:maxLines="1" />
+
+            <Button
+                android:id="@+id/generateChart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Generate Chart" />
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:visibility="gone" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </FrameLayout>

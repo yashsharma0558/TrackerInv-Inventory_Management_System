@@ -67,6 +67,11 @@ dependencies {
     implementation("org.apache.poi:poi-ooxml:5.2.3")
     implementation("org.apache.poi:poi:5.2.3")
 
+    //Gemini AI
+    implementation("com.google.ai.client.generativeai:generativeai:0.1.2")
+
+    //MPAndroidChart
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
 
 
