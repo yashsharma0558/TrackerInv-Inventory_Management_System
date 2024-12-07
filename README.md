@@ -1,4 +1,4 @@
-# Inventory Management System
+# TrackerInv - Inventory Management System
 
 A scalable inventory management application for tracking and analyzing sales and purchases efficiently. This app integrates a clean UI, secure backend, and data visualization to provide actionable insights.
 
