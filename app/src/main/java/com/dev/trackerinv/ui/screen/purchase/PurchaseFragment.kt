@@ -21,6 +21,7 @@ import com.dev.trackerinv.ui.adapter.SaleAdapter
 import com.dev.trackerinv.ui.utils.DatePickerUtil
 import com.dev.trackerinv.ui.viewmodel.PurchaseViewModel
 import com.dev.trackerinv.ui.viewmodel.SaleViewModel
+import com.google.gson.Gson
 
 class PurchaseFragment : Fragment() {
     private lateinit var viewModel: PurchaseViewModel
@@ -39,10 +40,11 @@ class PurchaseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPurchaseBinding.inflate(inflater, container, false)
-        adapter = PurchaseAdapter(emptyList())
+        adapter = PurchaseAdapter(emptyList()) { purchase ->
+            // Handle the item click here
+        }
         binding.purchasesRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.purchasesRecyclerView.adapter = adapter
-
 
 
         // Inflate the layout for this fragment
@@ -55,12 +57,33 @@ class PurchaseFragment : Fragment() {
         // Use your viewModel here
         // For example, observe data or call fetchData()
         viewModel.purchases.observe(viewLifecycleOwner) { purchases ->
-            adapter = PurchaseAdapter(purchases)
+            adapter = PurchaseAdapter(purchases) {
+
+                    purchase ->
+                val gson = Gson()
+                val purchaseJson = gson.toJson(purchase)
+
+                val bundle = Bundle().apply {
+                    putString("type", "purchase")
+                    putString("selectedPurchase", purchaseJson)
+                }
+                findNavController().navigate(R.id.action_purchaseFragment_to_detailFragment, bundle)
+            }
             binding.purchasesRecyclerView.adapter = adapter
         }
-        viewModel.filteredPurchases.observe(viewLifecycleOwner) {
-                sales ->
-            adapter = PurchaseAdapter(sales)
+        viewModel.filteredPurchases.observe(viewLifecycleOwner) { sales ->
+            adapter = PurchaseAdapter(sales) {
+
+                    purchase ->
+                val gson = Gson()
+                val purchaseJson = gson.toJson(purchase)
+
+                val bundle = Bundle().apply {
+                    putString("type", "purchase")
+                    putString("selectedPurchase", purchaseJson)
+                }
+                findNavController().navigate(R.id.action_purchaseFragment_to_detailFragment, bundle)
+            }
             binding.purchasesRecyclerView.adapter = adapter
         }
         binding.addPurchaseButton.setOnClickListener {
@@ -74,7 +97,8 @@ class PurchaseFragment : Fragment() {
     }
 
     private fun showFilterDialog() {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_filter_sales, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_filter_sales, null)
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
@@ -88,14 +112,12 @@ class PurchaseFragment : Fragment() {
         val resetButton = dialogView.findViewById<Button>(R.id.resetButton)
 
         startDateInput.setOnClickListener {
-            DatePickerUtil.showDatePicker(requireContext()){
-                    date ->
+            DatePickerUtil.showDatePicker(requireContext()) { date ->
                 startDateInput.text = date
             }
         }
         endDateInput.setOnClickListener {
-            DatePickerUtil.showDatePicker(requireContext()){
-                    date ->
+            DatePickerUtil.showDatePicker(requireContext()) { date ->
                 endDateInput.text = date
             }
         }
@@ -105,7 +127,8 @@ class PurchaseFragment : Fragment() {
             val endDate = endDateInput.text.toString()
 
             if (startDate.isEmpty() || endDate.isEmpty()) {
-                Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 // Handle the submit action
                 filterPurchasesByDate(startDate, endDate)
@@ -120,9 +143,14 @@ class PurchaseFragment : Fragment() {
 
         dialog.show()
     }
+
     private fun filterPurchasesByDate(startDate: String, endDate: String) {
         // Replace this with your filtering logic
         viewModel.filterPurchasesByDate(startDate, endDate)
-        Toast.makeText(requireContext(), "Filtering purchases from $startDate to $endDate", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            requireContext(),
+            "Filtering purchases from $startDate to $endDate",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

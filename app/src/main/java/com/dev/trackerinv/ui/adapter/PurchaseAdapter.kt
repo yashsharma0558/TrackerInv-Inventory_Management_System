@@ -8,9 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dev.trackerinv.R
 import com.dev.trackerinv.data.model.Purchase
+import com.dev.trackerinv.data.model.Sale
 import com.dev.trackerinv.ui.utils.ImagePickerUtil
 
-class PurchaseAdapter(private val purchaseList: List<Purchase>) : RecyclerView.Adapter<PurchaseAdapter.PurchaseViewHolder>() {
+class PurchaseAdapter(private val purchaseList: List<Purchase>, private val onItemClicked: (Purchase) -> Unit) : RecyclerView.Adapter<PurchaseAdapter.PurchaseViewHolder>() {
 
     class PurchaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val invoiceNumber: TextView = itemView.findViewById(R.id.invoiceNumber)
@@ -35,6 +36,9 @@ class PurchaseAdapter(private val purchaseList: List<Purchase>) : RecyclerView.A
         holder.pricePerUnit.text = purchase.price_per_unit.toString()
         val bitmap = ImagePickerUtil.base64ToBitmap(purchase.image)
         holder.image.setImageBitmap(bitmap)
+        holder.itemView.setOnClickListener {
+            onItemClicked(purchase)
+        }
     }
 
     override fun getItemCount(): Int {

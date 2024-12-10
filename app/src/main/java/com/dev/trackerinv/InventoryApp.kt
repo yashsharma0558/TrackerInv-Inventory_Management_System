@@ -6,6 +6,7 @@ import com.dev.trackerinv.data.api.ApiService
 import com.dev.trackerinv.data.api.RetrofitClient
 import com.dev.trackerinv.data.db.AppDatabase
 import com.dev.trackerinv.data.repository.PurchaseRepository
+import com.dev.trackerinv.data.repository.ReportRepository
 import com.dev.trackerinv.data.repository.SaleRepository
 import com.dev.trackerinv.domain.usecase.FilterPurchasesByDateUseCase
 import com.dev.trackerinv.domain.usecase.FilterSalesByDateUseCase
@@ -44,8 +45,9 @@ class InventoryApp : Application() {
         val reportUseCase = GenerateReportUseCase()
         val reportUseCase1 = FilterSalesByDateUseCase(saleRepository)
         val reportUseCase2 = FilterPurchasesByDateUseCase(purchaseRepository)
+        val reportRepository = ReportRepository(database.saleDao(), database.purchaseDao())
         val reportFactory =
-            ReportViewModelFactory(reportUseCase1, reportUseCase2, reportUseCase)
+            ReportViewModelFactory(reportUseCase1, reportUseCase2, reportUseCase, reportRepository)
         reportViewModel = reportFactory.create(ReportViewModel::class.java)
 
     }

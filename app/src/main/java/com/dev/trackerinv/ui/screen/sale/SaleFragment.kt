@@ -17,6 +17,7 @@ import com.dev.trackerinv.databinding.FragmentSaleBinding
 import com.dev.trackerinv.ui.adapter.SaleAdapter
 import com.dev.trackerinv.ui.utils.DatePickerUtil
 import com.dev.trackerinv.ui.viewmodel.SaleViewModel
+import com.google.gson.Gson
 import org.w3c.dom.Text
 
 class SaleFragment : Fragment() {
@@ -36,7 +37,10 @@ class SaleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSaleBinding.inflate(inflater, container, false)
-        adapter = SaleAdapter(emptyList())
+        adapter = SaleAdapter(emptyList()) {
+            sale ->
+            // Handle the item click here
+        }
         binding.salesRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.salesRecyclerView.adapter = adapter
         // Inflate the layout for this fragment
@@ -48,13 +52,33 @@ class SaleFragment : Fragment() {
         // Use your viewModel here
         // For example, observe data or call fetchData()
         viewModel.sales.observe(viewLifecycleOwner) { sales ->
-            adapter = SaleAdapter(sales)
+            adapter = SaleAdapter(sales){
+                sale ->
+                val gson = Gson()
+                val saleJson = gson.toJson(sale)
+
+                val bundle = Bundle().apply {
+                    putString("type", "sale")
+                    putString("selectedSale", saleJson)
+                }
+                findNavController().navigate(R.id.action_saleFragment_to_detailFragment, bundle)
+            }
             binding.salesRecyclerView.adapter = adapter
         }
 
         viewModel.filteredSales.observe(viewLifecycleOwner) {
                 sales ->
-            adapter = SaleAdapter(sales)
+            adapter = SaleAdapter(sales){
+                    sale ->
+                val gson = Gson()
+                val saleJson = gson.toJson(sale)
+
+                val bundle = Bundle().apply {
+                    putString("type", "sale")
+                    putString("selectedSale", saleJson)
+                }
+                findNavController().navigate(R.id.action_saleFragment_to_detailFragment, bundle)
+            }
             binding.salesRecyclerView.adapter = adapter
         }
 
@@ -66,6 +90,8 @@ class SaleFragment : Fragment() {
         binding.addFilterButton.setOnClickListener {
             showFilterDialog()
         }
+
+
 
 
 

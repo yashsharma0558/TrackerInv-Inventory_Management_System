@@ -2,8 +2,13 @@ package com.dev.trackerinv.ui.utils
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.util.Log
 import android.widget.TextView
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import kotlin.math.log
 
 object DatePickerUtil {
 
@@ -20,8 +25,17 @@ object DatePickerUtil {
             context,
             { _, selectedYear, selectedMonth, selectedDay ->
                 // Setting the selected date to the TextView
-                val selectedDate = "$selectedDay-${selectedMonth + 1}-$selectedYear"
-                onDateSelected(selectedDate)
+                var date = "$selectedYear-${selectedMonth + 1}-$selectedDay"
+                if(selectedDay< 10){
+                    date = "$selectedYear-${selectedMonth + 1}-0$selectedDay"
+                }
+                if (selectedMonth < 10){
+                    date = "$selectedYear-0${selectedMonth + 1}-$selectedDay"
+                }
+
+
+                onDateSelected(date)
+
             },
             year,
             month,

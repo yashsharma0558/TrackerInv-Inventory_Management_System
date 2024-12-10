@@ -1,60 +1,102 @@
 package com.dev.trackerinv.ui.screen.report.financial
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import com.dev.trackerinv.InventoryApp
 import com.dev.trackerinv.R
+import com.dev.trackerinv.databinding.FragmentFinancialReportBinding
+import com.dev.trackerinv.domain.model.RevenueTrend
+import com.dev.trackerinv.ui.viewmodel.ReportViewModel
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FinancialReportFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FinancialReportFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    private lateinit var viewModel: ReportViewModel
+    private lateinit var binding: FragmentFinancialReportBinding
+    private lateinit var chart: LineChart
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        viewModel = (requireActivity().application as InventoryApp).reportViewModel
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        binding = FragmentFinancialReportBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_financial_report, container, false)
+        viewModel.fetchFinancialSummary()
+        viewModel.fetchRevenueTrends()
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FinancialReportFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FinancialReportFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val totalProfit = binding.tvProfit
+        val totalPurchases = binding.tvTotalPurchases
+        val totalSales = binding.tvTotalSales
+        chart = binding.revenueChart
+        viewModel.financialSummary.observe(viewLifecycleOwner) { financialSummary ->
+            totalProfit.text = financialSummary.profit.toString()
+            totalPurchases.text = financialSummary.totalPurchases.toString()
+            totalSales.text = financialSummary.totalSales.toString()
+        }
+        viewModel.revenueTrends.observe(viewLifecycleOwner) {
+            trends ->
+            updateLineChart(trends)
+        }
+    }
+
+    private fun updateLineChart(trends: List<RevenueTrend>) {
+        val saleEntries = trends.mapIndexed { index, trend ->
+            Entry(index.toFloat(), trend.totalSales.toFloat())
+        }
+        val purchaseEntries = trends.mapIndexed { index, trend ->
+            Entry(index.toFloat(), trend.totalPurchases.toFloat())
+        }
+
+        val salesDataSet = LineDataSet(saleEntries, "Sale Revenue").apply {
+            color = Color.CYAN
+            valueTextColor = ContextCompat.getColor(requireContext(), R.color.black)
+            lineWidth = 2f
+            circleRadius = 4f
+            setDrawFilled(true)
+            fillColor = Color.CYAN
+        }
+        val purchasesDataSet = LineDataSet(purchaseEntries, "Purchase Revenue").apply {
+            color = Color.RED
+            valueTextColor = ContextCompat.getColor(requireContext(), R.color.black)
+            lineWidth = 2f
+            circleRadius = 4f
+            setCircleColor(Color.RED)
+            setDrawFilled(true)
+            fillColor = Color.RED
+        }
+
+        val lineData = LineData(salesDataSet, purchasesDataSet)
+        chart.apply {
+            data = lineData
+            animateX(500)
+            animateY(1500)
+            description.text = "Revenue Trends"
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.labelRotationAngle = (-30f)
+            xAxis.valueFormatter = IndexAxisValueFormatter(trends.map { it.month })
+            axisRight.isEnabled = false
+            setTouchEnabled(true)
+            isDragEnabled = true
+            setScaleEnabled(true)
+            invalidate()
+        }
     }
 }

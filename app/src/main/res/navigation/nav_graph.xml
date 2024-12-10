@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_saleFragment_to_addSaleFragment"
             app:destination="@id/addSaleFragment" />
+        <action
+            android:id="@+id/action_saleFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/addSaleFragment"
@@ -26,6 +29,9 @@
         <action
             android:id="@+id/action_purchaseFragment_to_addPurchaseFragment"
             app:destination="@id/addPurchaseFragment" />
+        <action
+            android:id="@+id/action_purchaseFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/reportFragment"
@@ -62,5 +68,21 @@
         android:name="com.dev.trackerinv.ui.screen.report.financial.FinancialReportFragment"
         android:label="fragment_financial_report"
         tools:layout="@layout/fragment_financial_report" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.dev.trackerinv.ui.screen.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="type"
+            app:argType="string" />
+        <argument
+            android:name="selectedSale"
+            app:argType="string" />
+        <argument
+            android:name="selectedPurchase"
+            app:argType="string" />
+
+    </fragment>
 
 </navigation>

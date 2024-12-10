@@ -10,7 +10,7 @@ import com.dev.trackerinv.R
 import com.dev.trackerinv.data.model.Sale
 import com.dev.trackerinv.ui.utils.ImagePickerUtil
 
-class SaleAdapter(private val salesList: List<Sale>) : RecyclerView.Adapter<SaleAdapter.SaleViewHolder>() {
+class SaleAdapter(private val salesList: List<Sale>, private val onItemClicked: (Sale) -> Unit) : RecyclerView.Adapter<SaleAdapter.SaleViewHolder>() {
 
     class SaleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val productName: TextView = itemView.findViewById(R.id.productName)
@@ -35,6 +35,10 @@ class SaleAdapter(private val salesList: List<Sale>) : RecyclerView.Adapter<Sale
         holder.date.text = sale.date
         val bitmap = ImagePickerUtil.base64ToBitmap(sale.image)
         holder.image.setImageBitmap(bitmap)
+
+        holder.itemView.setOnClickListener {
+            onItemClicked(sale)
+        }
     }
 
     override fun getItemCount(): Int {
